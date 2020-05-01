@@ -1,14 +1,13 @@
-import os  # Отсюда нам понадобятся методы для отображения содержимого директорий
+import os  
 import os.path
-import sys  # sys нужен для передачи argv в QApplication
+import sys 
 
 import httplib2
 import re
 import requests
 from PyQt5 import QtWidgets
 
-import design  # Это наш конвертированный файл дизайна
-
+import design 
 
 def studies_count():
     url = 'http://localhost:8042/instances/'
@@ -20,8 +19,6 @@ def studies_count():
     studies_list = re.findall(pattern, studies_list)
     return (len(studies_list))
 
-
-
 def show_hosts():
     url = 'http://localhost:8042/modalities/'
     images_list = requests.get(url).content
@@ -30,7 +27,6 @@ def show_hosts():
     re.findall(pattern, images_list)
     a = re.findall(pattern, images_list)
     return (a)
-
 
 def UploadFile(path):
     global success_count
@@ -88,8 +84,6 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                         self.completed += (1*100)/i
                         self.progressBar.setValue(self.completed)
 
-
-
     def send_all(self, hostname):
         url = 'http://localhost:8042/studies/'
         studies_list = requests.get(url).content
@@ -129,8 +123,6 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.completed += (1*100)/len(studies_list)
                 self.progressBar.setValue(self.completed)
 
-
-
     def push_dicom(self):
         where = self.lineEdit_4.text()
         self.send_all(where)
@@ -148,13 +140,11 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def browse_folder(self):
         list_file = []
-        #self.listWidget.clear()  # На случай, если в списке уже есть элементы
-        directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Выберите папку")
-        # открыть диалог выбора директории и установить значение переменной
-        # равной пути к выбранной директории
+        #self.listWidget.clear()  
+        directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Choose folder")
         count = 0
         name_file = []
-        if directory:  # не продолжать выполнение, если пользователь не выбрал директорию
+        if directory:  
            for current_dir, dirs, files in os.walk(directory):
                for i in files:
                    if i.endswith('.bin') or i.endswith('.dsr') or i.endswith('.dcm'):
@@ -170,8 +160,6 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.delete_all()
         self.lineEdit_2.setText('Clear is finished!')
 
-
-
     def enter_text(self):
         ip = self.lineEdit_3.text()
         #self.lineEdit_4.clear()
@@ -185,23 +173,20 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         #self.lineEdit_4.clear()
         self.lineEdit_5.setText('selected: '+port)
 
-
-
     def test(self):
         self.lineEdit.clear()
         self.lineEdit.setText('clicked item work')
 
 
-
 def main():
-    app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
-    window = ExampleApp()  # Создаём объект класса ExampleApp
-    window.show()  # Показываем окно
-    app.exec_()  # и запускаем приложение
+    app = QtWidgets.QApplication(sys.argv) 
+    window = ExampleApp() 
+    window.show() 
+    app.exec_() 
 
 
 
-if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
-    main()  # то запускаем функцию main()
+if __name__ == '__main__':  
+    main() 
 
 
